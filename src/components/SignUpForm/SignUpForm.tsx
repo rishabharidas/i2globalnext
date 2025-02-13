@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Snackbar, TextField, Alert, Box } from "@mui/material";
+import { Button, Input } from "@/components/DesignSystem/DesignSystem";
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
@@ -19,7 +19,6 @@ export default function SignUpForm() {
     password: false,
     confirmPassword: false,
   });
-  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const validateFields = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,7 +48,6 @@ export default function SignUpForm() {
       setErrorText(
         "Please fill in all required fields and ensure passwords match.",
       );
-      setShowSnackbar(true);
       return;
     } else {
       if (typeof window !== "undefined") {
@@ -70,16 +68,14 @@ export default function SignUpForm() {
 
   return (
     <>
-      <Box
-        component="form"
-        autoComplete="off"
+      <form
         onSubmit={(e) => validateFields(e)}
         className="w-full md:w-2/5 flex justify-center"
       >
         <div className="mx-2 flex flex-col justify-around gap-6 border border-gray-400 rounded-lg p-4 py-6 min-w-[350px]  min-h-[500px]">
           <span className="text-4xl w-full font-bold text-center">Sign Up</span>
           <div className="w-full flex flex-col justify-between gap-6 ">
-            <TextField
+            <Input
               label="Username"
               type="text"
               required
@@ -88,7 +84,7 @@ export default function SignUpForm() {
               value={loginDetails.username}
               onChange={handleInputChange}
             />
-            <TextField
+            <Input
               label="Email"
               type="email"
               required
@@ -97,7 +93,7 @@ export default function SignUpForm() {
               value={loginDetails.email}
               onChange={handleInputChange}
             />
-            <TextField
+            <Input
               label="Password"
               type="password"
               required
@@ -106,7 +102,7 @@ export default function SignUpForm() {
               value={loginDetails.password}
               onChange={handleInputChange}
             />
-            <TextField
+            <Input
               label="Confirm Password"
               type="password"
               required
@@ -118,46 +114,24 @@ export default function SignUpForm() {
 
             <div className="flex justify-center gap-3">
               <Button
-                variant="outlined"
+                variant="outline"
                 className="w-1/3"
                 onClick={reRouteToSignIn}
-                sx={{
-                  textTransform: "capitalize",
-                }}
-              >
-                Sign In
-              </Button>
+                buttonText="Sign In"
+              />
               <Button
                 variant="contained"
                 className="w-1/3"
                 type="submit"
-                sx={{
-                  textTransform: "capitalize",
-                }}
-              >
-                Register
-              </Button>
+                buttonText="Register"
+              />
             </div>
           </div>
+          <span className="w-full flex items-center justify-center text-red-500 h-4">
+            {errors.password || errors.email ? `${errorText}` : ""}
+          </span>
         </div>
-      </Box>
-      <Snackbar
-        open={showSnackbar}
-        autoHideDuration={5000}
-        onClose={() => setShowSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          onClose={() => setShowSnackbar(false)}
-          severity={
-            Object.values(errors).some((error) => error) ? "error" : "info"
-          }
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {errorText}
-        </Alert>
-      </Snackbar>
+      </form>
     </>
   );
 }
