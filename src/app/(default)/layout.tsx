@@ -2,7 +2,6 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import Link from "next/link";
-import { Breadcrumbs } from "@mui/material";
 import NavBar from "@/components/NavBar/NavBar";
 
 export default async function DefaultLayout({
@@ -27,10 +26,9 @@ export default async function DefaultLayout({
         <NavBar />
       </nav>
       <main className="flex flex-col gap-8 items-center sm:items-start w-full max-w-[1320px] px-8">
-        <div className="w-full justify-start">
-          <Breadcrumbs maxItems={2}>
-            <Link href={"/"}>Home</Link>
-          </Breadcrumbs>
+        <div className="w-full justify-start flex gap-2 text-gray-500">
+          <Link href={"/"}>{"Home"}</Link>
+          <span>/</span>
         </div>
         <div>{children}</div>
       </main>

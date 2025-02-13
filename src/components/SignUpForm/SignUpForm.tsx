@@ -1,8 +1,11 @@
 "use client";
 
-import { Button, Input } from "@/components/DesignSystem/DesignSystem";
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+
+import { setCookie } from "@/app/action";
+
+import { Button, Input } from "@/components/DesignSystem/DesignSystem";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -20,7 +23,7 @@ export default function SignUpForm() {
     confirmPassword: false,
   });
 
-  const validateFields = (e: FormEvent<HTMLFormElement>) => {
+  const validateFields = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newErrors = {
       username: false,
@@ -50,12 +53,10 @@ export default function SignUpForm() {
       );
       return;
     } else {
-      if (typeof window !== "undefined") {
-        document.cookie = `email=${loginDetails.email}`;
-        document.cookie = `password=${loginDetails.password}`;
-        document.cookie = `username=${loginDetails.username}`;
-        router.push("/signin");
-      }
+      await setCookie("email", loginDetails.email);
+      await setCookie("password", loginDetails.password);
+      await setCookie("username", loginDetails.username);
+      router.push("/signin");
     }
   };
 
@@ -72,11 +73,12 @@ export default function SignUpForm() {
         onSubmit={(e) => validateFields(e)}
         className="w-full md:w-2/5 flex justify-center"
       >
-        <div className="mx-2 flex flex-col justify-around gap-6 border border-gray-400 rounded-lg p-4 py-6 min-w-[350px]  min-h-[500px]">
+        <div className="mx-2 flex flex-col justify-around gap-6 border border-gray-400 rounded-lg p-4 py-6 min-w-[350px] min-h-[500px]">
           <span className="text-4xl w-full font-bold text-center">Sign Up</span>
           <div className="w-full flex flex-col justify-between gap-6 ">
             <Input
               label="Username"
+              autoFocus
               type="text"
               required
               error={errors.username}
@@ -127,8 +129,10 @@ export default function SignUpForm() {
               />
             </div>
           </div>
-          <span className="w-full flex items-center justify-center text-red-500 h-4">
-            {errors.password || errors.email ? `${errorText}` : ""}
+          <span className="w-full flex items-center justify-center text-red-500 h-11 text-center">
+            <span className="max-w-60 text-wrap">
+              {Object.values(errors).length ? `${errorText}` : ""}
+            </span>
           </span>
         </div>
       </form>

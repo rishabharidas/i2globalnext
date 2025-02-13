@@ -1,7 +1,7 @@
 "use client";
-// import Image from "next/image";
-
 import { useState, useEffect } from "react";
+
+import { getCookies } from "../action";
 import moment from "moment";
 
 import NotesLayout from "@/components/NotesLayout/NotesLayout";
@@ -11,14 +11,15 @@ export default function Home() {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    const cookie = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("username="));
-
-    if (cookie) {
-      setUsername(cookie.split("=")[1]);
-    }
+    handleCookies();
   }, []);
+
+  const handleCookies = async () => {
+    const cookie = await getCookies("username");
+    if (cookie?.value) {
+      setUsername(cookie.value);
+    }
+  };
 
   return (
     <div className="w-full my-3">

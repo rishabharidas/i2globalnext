@@ -1,0 +1,6 @@
+.modalStyles {
+  transform: translate(-50%, -50%);
+  min-height: 480px;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+  box-shadow: 5;
+}
