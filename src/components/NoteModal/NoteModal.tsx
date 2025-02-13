@@ -53,8 +53,10 @@ const NoteModal = (props: NoteModalProps) => {
     props.onSave({
       ...noteData,
       last_update: String(new Date()),
-      created_on: String(new Date()),
-      note_id: id,
+      created_on: props?.editData?.created_on
+        ? props?.editData?.created_on
+        : String(new Date()),
+      note_id: noteData?.note_id ? noteData.note_id : id,
     });
     props.onClose();
   };

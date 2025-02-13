@@ -15,18 +15,30 @@ export default function SignInForm() {
     e.preventDefault();
     const newErrors = { email: false, password: false };
 
-    if (
-      loginDetails.email === "demo@email.com" &&
-      loginDetails.password === "password"
-    ) {
-      router.push("/");
-    } else {
-      newErrors.email = true;
-      newErrors.password = true;
+    if (typeof window !== "undefined") {
+      const storedEmail = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("email="))
+        ?.split("=")[1];
+      const storedPassword = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("password="))
+        ?.split("=")[1];
 
-      setErrors(newErrors);
-      setErrorText("Invalid email or password.");
-      setShowSnackbar(true);
+      if (
+        loginDetails.email === storedEmail &&
+        loginDetails.password === storedPassword
+      ) {
+        document.cookie = "loggedin=true";
+        router.push("/");
+      } else {
+        newErrors.email = true;
+        newErrors.password = true;
+
+        setErrors(newErrors);
+        setErrorText("Invalid email or password.");
+        setShowSnackbar(true);
+      }
     }
   };
 
@@ -40,10 +52,8 @@ export default function SignInForm() {
         onSubmit={(e) => validateFields(e)}
         className="w-full md:w-2/5 flex justify-center"
       >
-        <div className="mx-2 flex flex-col justify-around gap-6 border border-gray-400 rounded-lg p-4 py-4 min-w-[350px] min-h-[500px]">
-          <span className="text-4xl w-full font-bold text-center text-red-900 mt-8">
-            Sign In
-          </span>
+        <div className="mx-2 flex flex-col justify-center gap-6 border border-gray-400 rounded-lg p-4 py-4 min-w-[350px] min-h-[500px]">
+          <span className="text-4xl w-full font-bold text-center">Sign In</span>
           <div className="w-full flex flex-col justify-between gap-6 ">
             <TextField
               label="Email"
@@ -84,7 +94,7 @@ export default function SignInForm() {
                   textTransform: "capitalize",
                 }}
               >
-                Signup
+                Register
               </Button>
               <Button
                 variant="contained"
@@ -98,9 +108,9 @@ export default function SignInForm() {
               </Button>
             </div>
           </div>
-          <span className="text-sm text-gray-500 text-center -mt-3">
+          {/* <span className="text-sm text-gray-500 text-center -mt-3">
             {"Use demo account to Sigin"}
-          </span>
+          </span> */}
         </div>
       </Box>
       <Snackbar

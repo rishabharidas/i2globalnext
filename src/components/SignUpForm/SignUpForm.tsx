@@ -51,16 +51,13 @@ export default function SignUpForm() {
       );
       setShowSnackbar(true);
       return;
-    }
-
-    if (
-      loginDetails.email === "demo@email.com" &&
-      loginDetails.password === "password"
-    ) {
-      router.push("/signin");
     } else {
-      setErrorText("Invalid email or password.");
-      setShowSnackbar(true);
+      if (typeof window !== "undefined") {
+        document.cookie = `email=${loginDetails.email}`;
+        document.cookie = `password=${loginDetails.password}`;
+        document.cookie = `username=${loginDetails.username}`;
+        router.push("/signin");
+      }
     }
   };
 
@@ -80,9 +77,7 @@ export default function SignUpForm() {
         className="w-full md:w-2/5 flex justify-center"
       >
         <div className="mx-2 flex flex-col justify-around gap-6 border border-gray-400 rounded-lg p-4 py-6 min-w-[350px]  min-h-[500px]">
-          <span className="text-4xl w-full font-bold text-center text-red-900">
-            Sign Up
-          </span>
+          <span className="text-4xl w-full font-bold text-center">Sign Up</span>
           <div className="w-full flex flex-col justify-between gap-6 ">
             <TextField
               label="Username"
@@ -140,7 +135,7 @@ export default function SignUpForm() {
                   textTransform: "capitalize",
                 }}
               >
-                Sign Up
+                Register
               </Button>
             </div>
           </div>

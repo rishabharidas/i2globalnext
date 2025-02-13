@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import {
@@ -10,11 +11,30 @@ import {
   List,
   ListItem,
   ListItemText,
-  Button,
+  Tabs,
+  Tab,
 } from "@mui/material";
 
 export default function NavBar() {
+  const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const tabItems = ["Notes", "About", "Account"];
+
+  const selectedTab =
+    pathname == "/"
+      ? "Notes"
+      : pathname == "/about"
+        ? "About"
+        : pathname == "/account"
+          ? "Account"
+          : "";
+
+  const handleTabChange = (e?: React.SyntheticEvent | null, value?: string) => {
+    if (value) {
+      router.push(`/${value == "Notes" ? "" : value.toLowerCase()}`);
+    }
+  };
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -23,9 +43,12 @@ export default function NavBar() {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        {["About ", "Notes", "Account"].map((text, index) => (
+        {["Notes", "About", "Account"].map((text, index) => (
           <ListItem key={index}>
-            <ListItemText primary={text} />
+            <ListItemText
+              primary={text}
+              onClick={() => handleTabChange(null, text)}
+            />
           </ListItem>
         ))}
       </List>
@@ -38,21 +61,29 @@ export default function NavBar() {
         {DrawerList}
       </Drawer>
       <div className="w-full flex justify-between h-full items-center max-w-[1320px]">
-        <Link href="/" className="text-3xl">
+        <Link href="/" className="text-3xl font-semibold">
           Keep Notes
         </Link>
         <span className="hidden md:flex gap-6">
-          <Link href={"#"}> About</Link>
-          <Link href={"#"}> Notes</Link>
-          <Link href={"#"}> Account</Link>
+          <Tabs value={selectedTab} onChange={handleTabChange}>
+            {tabItems.map((item, index) => {
+              return (
+                <Tab
+                  label={item}
+                  key={index}
+                  value={item}
+                  sx={{
+                    textTransform: "capitalize",
+                    fontWeight: 600,
+                  }}
+                />
+              );
+            })}
+          </Tabs>
         </span>
-        <Button
-          variant="text"
-          className="block md:hidden"
-          onClick={() => setOpen(true)}
-        >
+        <span className="block md:hidden" onClick={() => setOpen(true)}>
           <MenuIcon fontSize="large" />
-        </Button>
+        </span>
       </div>
     </>
   );

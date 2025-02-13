@@ -37,8 +37,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 
 
-## Login validated to test auths
-```
-email : demo@email.com
-passwrd: password
-```
+## to login signup and use that email and password(password has no validation)

@@ -9,6 +9,7 @@ import NoteModal from "@/components/NoteModal/NoteModal";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 import { NotesData } from "@/types/common.t";
+import moment from "moment";
 
 const NotesLayout = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const NotesLayout = () => {
   const AddNoteComponent = () => {
     return (
       <span
-        className="flex flex-col items-center justify-center h-[250px] w-[350px] md:w-[300px]  border border-dashed border-gray-400 rounded-md text-gray-500 cursor-pointer hover:drop-shadow-lg bg-gray-100"
+        className="flex flex-col items-center justify-center h-[250px] w-[350px] md:w-[300px]  border border-dashed border-gray-400 rounded-md text-gray-500 cursor-pointer hover:drop-shadow-md bg-gray-100"
         onClick={() => setShowNotesModal(true)}
       >
         Add New Note
@@ -42,7 +43,7 @@ const NotesLayout = () => {
           ? notes.map((note, index) => {
               return (
                 <span
-                  className="flex flex-col items-center justify-start h-[250px] w-[350px] md:w-[300px] border border-gray-400 rounded-md text-gray-500 cursor-pointer hover:drop-shadow-lg bg-gray-100"
+                  className="flex flex-col items-center justify-between h-[250px] w-[350px] md:w-[300px] border border-gray-400 rounded-md text-gray-500 cursor-pointer drop-shadow-md hover:drop-shadow-xl bg-gray-100"
                   onClick={() => {
                     setShowNotesModal(true);
                     setEditData(note);
@@ -61,9 +62,12 @@ const NotesLayout = () => {
                       <DeleteOutlineIcon fontSize="small" color="error" />
                     </span>
                   </span>
-                  <span className="w-full flex items-start justify-start p-2 py-4">
+                  <span className="w-full flex flex-grow items-start justify-start p-2 py-4">
                     {note.note_content}
                   </span>
+                  <div className="w-full flex justify-end text-xs px-2 border-t border-gray-400">
+                    Last Updated: {moment(note.last_update).calendar()}
+                  </div>
                 </span>
               );
             })
