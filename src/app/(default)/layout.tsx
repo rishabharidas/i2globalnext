@@ -27,7 +27,7 @@ export default async function DefaultLayout({
       </nav>
       <main className="flex flex-col gap-8 items-center sm:items-start w-full max-w-[1320px] px-8">
         <div className="w-full justify-start flex gap-2 text-gray-500">
-          <Link href={"/"}>{"Home"}</Link>
+          <Link href={"/"}>Home</Link>
           <span>/</span>
         </div>
         <div>{children}</div>

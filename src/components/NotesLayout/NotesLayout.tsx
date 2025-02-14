@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { setNoteData } from "@/redux/notesSlice";
+import { NotesData } from "@/types/common.t";
+
+import moment from "moment";
 
 import NoteModal from "@/components/NoteModal/NoteModal";
-
-import { NotesData } from "@/types/common.t";
-import moment from "moment";
 
 const NotesLayout = () => {
   const dispatch = useDispatch();
