@@ -1,4 +1,6 @@
-import SigninForm from "@/components/SignInForm/SigninForm";
+import dynamic from "next/dynamic";
+
+const SigninForm = dynamic(() => import("@/components/SignInForm/SigninForm"));
 
 export default function SignIn() {
   return (

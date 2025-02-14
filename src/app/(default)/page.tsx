@@ -3,8 +3,12 @@ import { useState, useEffect } from "react";
 
 import { getCookies } from "../action";
 import moment from "moment";
+import dynamic from "next/dynamic";
 
-import NotesLayout from "@/components/NotesLayout/NotesLayout";
+const NotesLayout = dynamic(
+  () => import("@/components/NotesLayout/NotesLayout"),
+);
+
 import { StoreProvider } from "@/redux/StoreProvder";
 
 export default function Home() {
