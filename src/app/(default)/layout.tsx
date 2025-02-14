@@ -25,12 +25,14 @@ export default async function DefaultLayout({
       <nav className="h-[100px] flex items-center justify-center bg-blue-300 px-8 ">
         <NavBar />
       </nav>
-      <main className="flex flex-col gap-8 items-center sm:items-start w-full max-w-[1320px] px-8">
-        <div className="w-full justify-start flex gap-2 text-gray-500">
+      <main className="flex w-full flex-col px-8 justify-center items-center">
+        <div className="w-full justify-start max-w-[1320px]">
           <Link href={"/"}>Home</Link>
           <span>/</span>
         </div>
-        <div>{children}</div>
+        <div className="justify-start max-w-[1320px] w-full flex">
+          {children}
+        </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center  max-w-[1320px]"></footer>
     </div>

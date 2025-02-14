@@ -8,53 +8,45 @@ interface NoteModalProps {
   open: boolean;
   onClose: () => void;
   onSave: (data: NotesData) => void;
-  onDelete: (id: string) => void;
+  onDelete: (noteId: string) => void;
   editData?: NotesData | null;
 }
 
 const NoteModal = (props: NoteModalProps) => {
-  const [title, setTitle] = useState("Create Notes");
+  const [title, setTitle] = useState<string>("Create Note");
   const id = crypto.randomUUID();
-  const [noteData, setNoteData] = useState({
-    note_title: "",
-    note_content: "",
-    note_id: "",
-  });
 
   useEffect(() => {
     if (props.open) {
-      setNoteData({
-        note_title: props?.editData?.note_title ?? "",
-        note_content: props?.editData?.note_content ?? "",
-        note_id: props?.editData?.note_id ?? "",
-      });
       if (props?.editData?.note_id) {
         setTitle("Edit Note");
+      } else {
+        setTitle("Create Note");
       }
     }
-    return () => {
-      setNoteData({
-        note_title: "",
-        note_content: "",
-        note_id: "",
-      });
-    };
-  }, [props.open]);
+  }, [props.open, props?.editData?.note_id]);
 
-  const saveNote = () => {
-    props.onSave({
-      ...noteData,
+  const deleteNote = () => {
+    props.onDelete(props.editData?.note_id || "");
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const noteData = {
+      note_title: formData.get("note_title") as string,
+      note_content: formData.get("note_content") as string,
       last_update: String(new Date()),
       created_on: props?.editData?.created_on
         ? props?.editData?.created_on
         : String(new Date()),
-      note_id: noteData?.note_id ? noteData.note_id : id,
-    });
-    props.onClose();
-  };
+      note_id: props?.editData?.note_id ? props?.editData?.note_id : id,
+    };
 
-  const deleteNote = () => {
-    props.onDelete(id);
+    props.onSave(noteData);
+    e.currentTarget.reset();
+    props.onClose();
   };
 
   return (
@@ -73,51 +65,39 @@ const NoteModal = (props: NoteModalProps) => {
             <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
           </svg>
         </div>
-        <div className="px-5 flex flex-col gap-6 pt-3">
-          <Input
-            label="Note Heading"
-            value={noteData.note_title}
-            onChange={(e) =>
-              setNoteData((prev) => {
-                return {
-                  ...prev,
-                  note_title: e.target.value,
-                };
-              })
-            }
-          />
-          <TextArea
-            label={"Enter Note Here"}
-            rows={14}
-            value={noteData.note_content}
-            onChange={(e) =>
-              setNoteData((prev) => {
-                return {
-                  ...prev,
-                  note_content: e.target.value,
-                };
-              })
-            }
-          />
-        </div>
-        <div className="w-full justify-end flex px-5 my-1 mb-3 gap-4">
-          {props.editData?.note_id ? (
+        <form onSubmit={handleSubmit}>
+          <div className="px-5 flex flex-col gap-6 pt-3">
+            <Input
+              label="Note Heading"
+              name="note_title"
+              defaultValue={props.editData?.note_title}
+            />
+            <TextArea
+              label={"Enter Note Here"}
+              rows={14}
+              name="note_content"
+              defaultValue={props.editData?.note_content}
+            />
+          </div>
+          <div className="w-full justify-end flex px-5 my-1 mb-3 gap-4">
+            {props.editData?.note_id ? (
+              <Button
+                variant="error"
+                onClick={() => deleteNote()}
+                buttonText="Delete"
+                classes="min-w-20"
+              />
+            ) : (
+              ""
+            )}
             <Button
-              variant="error"
-              onClick={() => deleteNote()}
-              buttonText="Delete"
+              variant="contained"
+              buttonText="Save"
+              type="submit"
               classes="min-w-20"
             />
-          ) : (
-            ""
-          )}
-          <Button
-            variant="contained"
-            onClick={() => saveNote()}
-            buttonText="Save"
-            classes="min-w-20"
-          />
-        </div>
+          </div>
+        </form>
       </div>
     </Modal>
   );

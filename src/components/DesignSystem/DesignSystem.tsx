@@ -119,7 +119,7 @@ const Modal = ({
       onClick={handleBackgroundClick}
     >
       <div
-        className={`bg-white rounded-lg shadow-md relative w-4/5 md:w-[50%] transition-all duration-300 ease-in-out
+        className={`bg-white rounded-lg shadow-md relative w-4/5 md:w-[720px] transition-all duration-300 ease-in-out
           ${open ? "scale-100 opacity-100 translate-y-0" : "scale-95 opacity-0 -translate-y-4"}`}
       >
         {children}

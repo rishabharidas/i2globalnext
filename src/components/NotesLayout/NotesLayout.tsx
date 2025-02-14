@@ -22,6 +22,8 @@ const NotesLayout = () => {
 
   const deleteNote = (id: string) => {
     dispatch(setNoteData({ data: { note_id: id }, actionType: "delete" }));
+    setShowNotesModal(false);
+    setEditData(null);
   };
 
   const AddNoteComponent = () => {
@@ -86,14 +88,10 @@ const NotesLayout = () => {
         editData={editData}
         onClose={() => {
           setShowNotesModal(false);
-          setEditData({
-            note_id: "",
-            note_content: "",
-            note_title: "",
-          });
+          setEditData(null);
         }}
         onSave={(data) => saveData(data)}
-        onDelete={(id) => deleteNote(id)}
+        onDelete={(noteId) => deleteNote(noteId)}
       />
     </>
   );
